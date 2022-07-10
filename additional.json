@@ -1,0 +1,36 @@
+{
+    "token": "discord token",
+
+    "api": "weather api",
+
+    "greetings": [
+        "Feed me!", "Food bowl empty, need more food!",
+        "(ignores and eats)", "'Sup bitch...I mean meow meow!",
+        "I want catnip!", "(licks balls)", "(glares at you)",
+        "(walks up to you)", "(sleeping)", "(licks Korra)",
+        "(rolls over)", "(bird watching)", "(yawn)", "....", "Meow!",
+        "(snoring)", "(rolls over)"
+    ],
+
+    "pats": [
+        "grrrrr","(purr purr)","(swats your hand)",
+        "mewwwww~","(bites your hand)","(walks away)",
+        "(tail whips you)","(headbutts you)","Meow!",
+        "Don't touch me peasant!","(scratches you)",
+        "(nudges you with head)","(pounces at you)",
+        "Away! Now!", "(ignores you)"
+    ],
+
+    "angry": [
+        "has choosen death!","Die peasant!","was scratched and bit out of resentment!"
+    ],
+
+    "hungry": ["Finally, a useful peasant.", "Food bowl full~ time to eat!", "(eats and ignores you)","(rolls over to eat)",
+        "Finally, kept me waiting a year!"
+    ],
+
+    "response": [
+        "cutie", "good boy", "asami", "basami", "smol", "boah", "catnip", "food", "kitty", "balls"
+    ]
+
+}
