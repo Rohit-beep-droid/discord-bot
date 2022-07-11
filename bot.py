@@ -11,9 +11,9 @@ NOTE: I HAVE USED A SEPARATE JSON FILES FOR ASAMI'S RESPONSES
 AND YOU MAY USE YOUR OWN JSON FILE
 
 """
-import discord, random, typing, asyncio, requests, json
+import discord, random, typing, asyncio, requests
 from discord.ext import commands
-from asami_weather import attributes_parse, weather_msg, invalid_msg, visibility_parse
+from bot_weather import attributes_parse, weather_msg, invalid_msg, visibility_parse
 from discord.utils import get
 
 intents = discord.Intents(members=True)
