@@ -4,27 +4,27 @@ My first ever Discord bot and first time working with an API
 The bot is not complete since there are features I wanted to add
 I could not due to external factors and life in general
 
+I have decided to delete some features (kick, ban, unban), since
+I believe they are unnecessary.
+
+NOTE: I HAVE USED A SEPARATE JSON FILES FOR ASAMI'S RESPONSES
+AND YOU MAY USE YOUR OWN JSON FILE
+
 """
 import discord, random, typing, asyncio, requests, json
 from discord.ext import commands
-from asami_weather import data_parse, weather_message, invalid_location
+from asami_weather import attributes_parse, weather_msg, invalid_msg, visibility_parse
 from discord.utils import get
 
 intents = discord.Intents(members=True)
 bot = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix = 'a!')
 
-with open("secret.json", 'r') as secrets_file:
-    secret = json.load(secrets_file)
-
-token = secret['token']
-api_key = secret['api']
-pats = secret['pats']
-greetings = secret['greetings']
-angry = secret['angry']
-hungry = secret['hungry']
-response = secret['response']
+token = ''
+weather_api_key = ''
 bot.remove_command('help')
+
+# EVENTS
 
 @bot.event
 async def on_ready():
@@ -44,35 +44,11 @@ async def on_member_leave(ctx, member):
     embed = discord.Ember(title=f'Rip {member.user}', description="Meow! Down goes one more!",color=discord.Color.red())
     await bot.channel.ctx.send(embed = embed)
 
+ # COMMANDS
+
 @bot.command()
 async def bite(ctx, member: discord.Member, *, reason='for being a hoe'):
     await ctx.send(f'{member.mention} just got bit {reason}!')
-
-@bot.command()
-@commands.has_permissions(kick_members=True)
-async def kick(ctx, member: discord.Member,*,reason=None):
-    if reason == None:
-        reason = 'no reason provided!'
-    await ctx.guild.kick(member)
-    await ctx.send(f'{member.mention} has been scared away by Asami {reason}')
-
-@bot.command()
-@commands.has_permissions(ban_members=True)
-async def ban(ctx, member: discord.Member, *,reason=None):
-    await member.ban(reason=reason)
-    await ctx.send(f'{member.mention} just got swatted {reason}!')
-
-@bot.command()
-@commands.has_permissions(administrator=True)
-async def unban(ctx, *, member):
-    banned_users = await ctx.guild.bans()
-    member_name, member_discriminator = member.split("#")
-    for ban_entry in banned_users:
-        user = ban_entry.user
-        if(user.name, user.discriminator) == (member_name, member_discriminator):
-            await ctx.guild.unban(user)
-            await ctx.send(f'Unbanned {user.mention}')
-            return
 
 @bot.command()
 async def swat(ctx, member: discord.Member, *, reason='for being a hoe'):
@@ -92,7 +68,7 @@ async def pat(ctx):
 
 bot.counter = 0
 @bot.command()
-async def smooch(ctx):
+async def kiss(ctx):
     user = ctx.author.mention
     bot.counter+=1
     if bot.counter == 1:
@@ -115,17 +91,31 @@ async def on_message(message):
             break
     await bot.process_commands(message)
 
+# NEW FEATURE
+
 @bot.command()
 async def weather(ctx, message):
     location = message
     if len(location) >= 1:
-        url = f'https://api.openweathermap.org/data/2.5/weather?q={location}&units=imperial&appid={api_key}'
+        url = f'https://api.openweathermap.org/data/2.5/weather?q={location}&units=imperial&appid={weather_api_key}'
         try:
             data = json.loads(requests.get(url).content)
-            data = data_parse(data)
-            await ctx.send(embed=weather_message(data, location))
+            visibility = visibility_parse(data)
+            data = attributes_parse(data)
+            await ctx.send(embed=weather_msg(data, visibility, location))
         except KeyError:
-            await ctx.send(embed=invalid_location(location))
+            await ctx.send(embed=invalid_msg(location))
+
+@bot.event
+async def on_message(message):
+    msg = message.content.lower()
+    for word in response:
+        if word in msg:
+            await message.channel.send(random.choice(greetings))
+            break
+    await bot.process_commands(message)
+    
+# HELP COMMANDS
 
 @bot.group(invoke_without_command=True)
 async def help(ctx):
@@ -134,7 +124,7 @@ async def help(ctx):
     embed.add_field(name="Moderation",value="kick, ban, unban", inline=False)
     embed.add_field(name="Miscellaneous",value="bite, hello, feed, meow, pat, swat, smooch", inline=False)
     embed.add_field(name="New Feature(s)",value="weather")
-    embed.add_field(name="Features",value="Weather Teller (Asami can sense the weather!)\nTimer (Coming soon!)\n(Coming soon!)", inline=False)
+    embed.add_field(name="Features",value="Weather Teller (Asami can sense the weather!)\n(Coming soon!)\n(Coming soon!)", inline=False)
     await ctx.send(embed = embed)
 
 @help.command()
@@ -156,24 +146,6 @@ async def pat(ctx):
     await ctx.send(embed=embed)
 
 @help.command()
-async def kick(ctx):
-    embed = discord.Embed(title="Kick",description="Asami kicks a member from the server",color=ctx.author.color)
-    embed.add_field(name="Syntax",value="a!kick <member> [reason]")
-    await ctx.send(embed=embed)
-
-@help.command()
-async def ban(ctx):
-    embed = discord.Embed(title="Ban",description="Asami bans a member from the server",color=ctx.author.color)
-    embed.add_field(name="Syntax",value="a!ban <member> [reason]")
-    await ctx.send(embed=embed)
-
-@help.command()
-async def unban(ctx):
-    embed = discord.Embed(title="Unban",description="Asami unbans a member from the server",color=ctx.author.color)
-    embed.add_field(name="Syntax",value="a!unban <member>")
-    await ctx.send(embed=embed)
-
-@help.command()
 async def swat(ctx):
     embed = discord.Embed(title="Swat",description="Asami swats a member from the server",color=ctx.author.color)
     embed.add_field(name="Syntax",value="a!swat <member> [reason]")
@@ -192,9 +164,9 @@ async def feed(ctx):
     await ctx.send(embed=embed)
 
 @help.command()
-async def smooch(ctx):
-    embed = discord.Embed(title="Smooch",description="Give Asami a fat smooch but be careful",color=ctx.author.color)
-    embed.add_field(name="Syntax",value="a!smooch")
+async def kiss(ctx):
+    embed = discord.Embed(title="Kiss",description="Give Asami a kiss but be careful",color=ctx.author.color)
+    embed.add_field(name="Syntax",value="a!kiss")
     await ctx.send(embed=embed)
 
 @help.command()
