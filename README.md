@@ -10,7 +10,9 @@ However, I am satisfied with many of the features I have added so far, my friend
 
 SOON TO BE ADDED
 
-BIG THANKS TO DISCORD AND OPENWEATHER FOR LETTING ME CREATE MY FIRST EVER BOT USING THEIR API
+## Gratitude
+
+BIG THANKS TO **DISCORD** AND **OPENWEATHER** FOR LETTING ME CREATE MY FIRST EVER BOT USING THEIR API
 
 Link to openweather: https://openweathermap.org/
 
