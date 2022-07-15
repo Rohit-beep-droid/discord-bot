@@ -1,4 +1,4 @@
-# discord-bot
+# Discord-bot
 A Discord bot based on my cat. The bot is meant to be fun, interactive, informative, and a parody version of my cat.
 
 I will not provide all the files required for the bot to function since some of the files contains sensitive information about the bot.
@@ -8,7 +8,7 @@ However, I am satisfied with many of the features I have added so far, my friend
 
 ## Showcase
 
-SOON TO BE ADDED
+![](https://i.imgur.com/i1A9pcd.gif)
 
 ## Gratitude
 
