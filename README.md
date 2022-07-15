@@ -10,6 +10,8 @@ However, I am satisfied with many of the features I have added so far, my friend
 
 ![](https://i.imgur.com/i1A9pcd.gif)
 
+![](https://i.imgur.com/a9avOno.png)
+
 ## Gratitude
 
 BIG THANKS TO **DISCORD** AND **OPENWEATHER** FOR LETTING ME CREATE MY FIRST EVER BOT USING THEIR API
